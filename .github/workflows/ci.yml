@@ -20,7 +20,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Ninja
-        uses: aseptic/setup-ninja@v1
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Set up MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
         run: |
@@ -37,12 +41,13 @@ jobs:
       - name: CLI Sanity Check
         shell: bash
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
+          if [ -f "./build/pyattackmap.exe" ]; then
             BIN="./build/pyattackmap.exe"
+          elif [ -f "./build/Release/pyattackmap.exe" ]; then
+            BIN="./build/Release/pyattackmap.exe"
           else
             BIN="./build/pyattackmap"
           fi
           $BIN --version
           $BIN rules
           $BIN scan tests/fixtures/safe --format json
-
