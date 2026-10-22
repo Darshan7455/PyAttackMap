@@ -1,0 +1,55 @@
+{
+  "system_info": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "python_version": "3.13.15",
+    "pyattackmap_version": "0.1.0"
+  },
+  "benchmarks": {
+    "small": {
+      "corpus": "small",
+      "file_count": 10,
+      "total_bytes": 1590,
+      "total_kb": 1.55,
+      "trials": 5,
+      "avg_duration_sec": 0.02916,
+      "min_duration_sec": 0.0159,
+      "max_duration_sec": 0.08063,
+      "files_per_sec": 342.89,
+      "kb_per_sec": 53.24,
+      "mb_per_sec": 0.052,
+      "avg_peak_memory_kb": 82.56,
+      "findings_detected": 5
+    },
+    "medium": {
+      "corpus": "medium",
+      "file_count": 50,
+      "total_bytes": 10646,
+      "total_kb": 10.4,
+      "trials": 5,
+      "avg_duration_sec": 0.31834,
+      "min_duration_sec": 0.08978,
+      "max_duration_sec": 1.22717,
+      "files_per_sec": 157.06,
+      "kb_per_sec": 32.66,
+      "mb_per_sec": 0.032,
+      "avg_peak_memory_kb": 177.19,
+      "findings_detected": 25
+    },
+    "large": {
+      "corpus": "large",
+      "file_count": 200,
+      "total_bytes": 115823,
+      "total_kb": 113.11,
+      "trials": 5,
+      "avg_duration_sec": 1.60857,
+      "min_duration_sec": 0.75462,
+      "max_duration_sec": 4.87267,
+      "files_per_sec": 124.33,
+      "kb_per_sec": 70.32,
+      "mb_per_sec": 0.069,
+      "avg_peak_memory_kb": 955.51,
+      "findings_detected": 300
+    }
+  }
+}

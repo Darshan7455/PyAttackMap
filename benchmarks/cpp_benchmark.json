@@ -1,0 +1,52 @@
+{
+  "system_info": {
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "benchmarks": {
+    "small": {
+      "corpus": "small",
+      "file_count": 10,
+      "total_bytes": 1590,
+      "total_kb": 1.55,
+      "trials": 5,
+      "avg_wall_duration_sec": 0.014854,
+      "avg_engine_duration_sec": 0.007675,
+      "min_engine_duration_sec": 0.003156,
+      "max_engine_duration_sec": 0.024615,
+      "files_per_sec": 1302.87,
+      "kb_per_sec": 202.3,
+      "mb_per_sec": 0.198,
+      "findings_detected": 5
+    },
+    "medium": {
+      "corpus": "medium",
+      "file_count": 50,
+      "total_bytes": 10646,
+      "total_kb": 10.4,
+      "trials": 5,
+      "avg_wall_duration_sec": 0.037535,
+      "avg_engine_duration_sec": 0.028569,
+      "min_engine_duration_sec": 0.012023,
+      "max_engine_duration_sec": 0.076802,
+      "files_per_sec": 1750.13,
+      "kb_per_sec": 363.9,
+      "mb_per_sec": 0.355,
+      "findings_detected": 25
+    },
+    "large": {
+      "corpus": "large",
+      "file_count": 200,
+      "total_bytes": 115823,
+      "total_kb": 113.11,
+      "trials": 5,
+      "avg_wall_duration_sec": 0.147248,
+      "avg_engine_duration_sec": 0.131704,
+      "min_engine_duration_sec": 0.034613,
+      "max_engine_duration_sec": 0.503243,
+      "files_per_sec": 1518.55,
+      "kb_per_sec": 858.81,
+      "mb_per_sec": 0.839,
+      "findings_detected": 300
+    }
+  }
+}

@@ -1,0 +1,48 @@
+name: C++20 CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os }} - C++20 Release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ninja
+        uses: aseptic/setup-ninja@v1
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Library, CLI, and Tests
+        run: |
+          cmake --build build --config Release
+
+      - name: Run Test Suite (CTest)
+        run: |
+          ctest --test-dir build --output-on-failure -C Release
+
+      - name: CLI Sanity Check
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            BIN="./build/pyattackmap.exe"
+          else
+            BIN="./build/pyattackmap"
+          fi
+          $BIN --version
+          $BIN rules
+          $BIN scan tests/fixtures/safe --format json
+

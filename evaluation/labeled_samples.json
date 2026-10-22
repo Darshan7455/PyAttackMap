@@ -1,0 +1,93 @@
+[
+  {
+    "id": "eval-sql-01",
+    "name": "SQL injection via direct string concatenation",
+    "code": "import sqlite3\ndef fetch_user(cursor, uid):\n    cursor.execute('SELECT * FROM users WHERE id = ' + uid)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM001",
+    "expected_cwe": "CWE-89",
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-sql-02",
+    "name": "Safe parameterized SQL query",
+    "code": "import sqlite3\ndef fetch_user(cursor, uid):\n    cursor.execute('SELECT * FROM users WHERE id = ?', (uid,))\n",
+    "expected_vulnerable": false,
+    "expected_rule": null,
+    "expected_cwe": null,
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-sql-03",
+    "name": "SQL injection via f-string with tainted input",
+    "code": "import sqlite3\ndef handler(cursor):\n    u = input('User: ')\n    q = f'SELECT * FROM u WHERE name = \\'{u}\\''\n    cursor.execute(q)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM001",
+    "expected_cwe": "CWE-89",
+    "has_taint_flow": true
+  },
+  {
+    "id": "eval-cmd-01",
+    "name": "Command injection via os.system with tainted input",
+    "code": "import os\ndef ping_host():\n    h = input('Host: ')\n    os.system('ping -c 1 ' + h)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM002",
+    "expected_cwe": "CWE-78",
+    "has_taint_flow": true
+  },
+  {
+    "id": "eval-cmd-02",
+    "name": "Safe subprocess execution with argument array",
+    "code": "import subprocess\ndef ping_host(host):\n    subprocess.run(['ping', '-c', '1', host], shell=False)\n",
+    "expected_vulnerable": false,
+    "expected_rule": null,
+    "expected_cwe": null,
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-cmd-03",
+    "name": "Command injection via subprocess shell=True",
+    "code": "import subprocess\ndef run_cmd(target):\n    cmd = 'echo ' + target\n    subprocess.run(cmd, shell=True)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM002",
+    "expected_cwe": "CWE-78",
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-cmd-04",
+    "name": "Sanitized shell command with shlex.quote",
+    "code": "import os, shlex\ndef safe_echo():\n    raw = input()\n    clean = shlex.quote(raw)\n    os.system('echo ' + clean)\n",
+    "expected_vulnerable": false,
+    "expected_rule": null,
+    "expected_cwe": null,
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-deser-01",
+    "name": "Unsafe deserialization of tainted input",
+    "code": "import pickle\ndef load_session():\n    token = input('Token: ')\n    return pickle.loads(token)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM003",
+    "expected_cwe": "CWE-502",
+    "has_taint_flow": true
+  },
+  {
+    "id": "eval-deser-02",
+    "name": "Safe JSON deserialization",
+    "code": "import json\ndef load_config(raw_str):\n    return json.loads(raw_str)\n",
+    "expected_vulnerable": false,
+    "expected_rule": null,
+    "expected_cwe": null,
+    "has_taint_flow": false
+  },
+  {
+    "id": "eval-deser-03",
+    "name": "Static pickle load with risky API",
+    "code": "import pickle\ndef read_cache(f):\n    return pickle.load(f)\n",
+    "expected_vulnerable": true,
+    "expected_rule": "PAM003",
+    "expected_cwe": "CWE-502",
+    "has_taint_flow": false
+  }
+]
+
