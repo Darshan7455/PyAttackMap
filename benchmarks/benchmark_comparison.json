@@ -1,0 +1,35 @@
+{
+  "small": {
+    "file_count": 10,
+    "total_kb": 1.55,
+    "python_findings": 5,
+    "cpp_findings": 5,
+    "python_duration_ms": 29.16,
+    "cpp_duration_ms": 7.68,
+    "speedup_factor": 3.8,
+    "python_files_per_sec": 342.89,
+    "cpp_files_per_sec": 1302.87
+  },
+  "medium": {
+    "file_count": 50,
+    "total_kb": 10.4,
+    "python_findings": 25,
+    "cpp_findings": 25,
+    "python_duration_ms": 318.34,
+    "cpp_duration_ms": 28.57,
+    "speedup_factor": 11.14,
+    "python_files_per_sec": 157.06,
+    "cpp_files_per_sec": 1750.13
+  },
+  "large": {
+    "file_count": 200,
+    "total_kb": 113.11,
+    "python_findings": 300,
+    "cpp_findings": 300,
+    "python_duration_ms": 1608.57,
+    "cpp_duration_ms": 131.7,
+    "speedup_factor": 12.21,
+    "python_files_per_sec": 124.33,
+    "cpp_files_per_sec": 1518.55
+  }
+}

@@ -1,0 +1,74 @@
+# C++ & CMake Build Artifacts
+build/
+build*/
+cmake-build-*/
+out/
+CMakeUserPresets.json
+compile_commands.json
+.clangd/
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.idb
+
+# Scan Reports & Benchmark Output
+pyattackmap-report.json
+report.json
+test_*.json
+benchmarks/corpora/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Package archives
+*.zip
+*.tar.gz
+
