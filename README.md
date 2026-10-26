@@ -126,6 +126,38 @@ int main() {
 
 ---
 
+## Web Frontend Dashboard
+
+An interactive browser-based frontend for PyAttackMap is available in the `frontend/` directory.
+
+### Features
+- **Code Scanner**: Paste Python source or upload a `.py` file and run simulated taint analysis
+- **Visual Findings**: Color-coded severity cards (CRITICAL / HIGH / MEDIUM / LOW) with CWE reference and remediation guidance
+- **Data-Flow Graphs**: Interactive attack path visualization showing SOURCE → TAINT → SINK propagation chains
+- **Mermaid Export**: One-click copy of Mermaid flowchart syntax for embedding in docs/reports
+- **JSON Export**: Download structured scan reports as `pyattackmap_report.json`
+- **Rules Reference**: Built-in documentation for PAM001, PAM002, PAM003
+
+### Usage
+Open `frontend/index.html` directly in any modern browser — no build step required.
+
+```bash
+# Quick start (opens in default browser on Windows)
+start frontend/index.html
+
+# Or serve with any static file server
+npx serve frontend/
+```
+
+### Files
+| File | Description |
+|------|-------------|
+| `frontend/index.html` | Main dashboard HTML |
+| `frontend/style.css`  | Dark cyberpunk theme stylesheet |
+| `frontend/app.js`     | Taint analysis engine + UI logic |
+
+---
+
 ## Legacy Python Implementation
 
 The original pure-Python prototype is preserved on the git branch `legacy-python` and archived in `legacy_python/`.

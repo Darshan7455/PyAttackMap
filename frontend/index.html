@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyAttackMap – Security Analysis Dashboard</title>
+  <meta name="description" content="PyAttackMap is an explainable static security analysis and data-flow visualization tool for Python source code. Detect SQL injection, command injection, and unsafe deserialization vulnerabilities instantly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── TOP NAVBAR ── -->
+  <header class="navbar" id="main-navbar">
+    <div class="navbar-brand">
+      <div class="brand-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="#00f5c4" stroke-width="1.5" fill="none"/>
+          <polygon points="14,7 21,11 21,17 14,21 7,17 7,11" stroke="#00f5c4" stroke-width="1" fill="rgba(0,245,196,0.08)"/>
+          <circle cx="14" cy="14" r="3" fill="#00f5c4"/>
+        </svg>
+      </div>
+      <span class="brand-name">PyAttack<span class="brand-accent">Map</span></span>
+      <span class="brand-badge">C++20 Engine</span>
+    </div>
+    <nav class="navbar-links">
+      <a href="#scan-section" class="nav-link active" id="nav-scan">Scanner</a>
+      <a href="#rules-section" class="nav-link" id="nav-rules">Rules</a>
+      <a href="#about-section" class="nav-link" id="nav-about">About</a>
+    </nav>
+    <div class="navbar-actions">
+      <div class="status-indicator" id="engine-status">
+        <span class="status-dot pulse"></span>
+        <span class="status-text">Engine Ready</span>
+      </div>
+      <button class="btn-github" onclick="window.open('https://github.com/Darshan7455/PyAttackMap','_blank')" id="github-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </button>
+    </div>
+  </header>
+
+  <!-- ── HERO BANNER ── -->
+  <section class="hero" id="hero-section">
+    <div class="hero-particles" id="particles-container"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Static Security Analysis · 42x Faster than Python</div>
+      <h1 class="hero-title">Scan. Detect. <span class="gradient-text">Visualize.</span></h1>
+      <p class="hero-subtitle">
+        Upload your Python code and get instant, explainable vulnerability reports with interactive data-flow attack graphs. Powered by a native C++20 engine with Tree-sitter parsing.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-chip"><span class="stat-value">42x</span><span class="stat-label">Faster</span></div>
+        <div class="stat-chip"><span class="stat-value">5,500+</span><span class="stat-label">Files/sec</span></div>
+        <div class="stat-chip"><span class="stat-value">3</span><span class="stat-label">CWE Rules</span></div>
+        <div class="stat-chip"><span class="stat-value">24</span><span class="stat-label">Tests Pass</span></div>
+      </div>
+      <button class="btn-primary hero-cta" id="start-scan-hero-btn" onclick="document.getElementById('scan-section').scrollIntoView({behavior:'smooth'})">
+        Start Scanning
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+
+    <!-- ── SCAN SECTION ── -->
+    <section id="scan-section" class="section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="title-icon">⚡</span> Code Scanner
+        </h2>
+        <p class="section-subtitle">Paste Python code or upload a .py file to detect security vulnerabilities</p>
+      </div>
+
+      <div class="scanner-layout">
+        <!-- Left: Input Panel -->
+        <div class="panel input-panel" id="input-panel">
+          <div class="panel-header">
+            <span class="panel-title">Python Source Input</span>
+            <div class="panel-actions">
+              <button class="btn-icon" id="load-demo-btn" title="Load Demo Code">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                Demo
+              </button>
+              <button class="btn-icon" id="clear-btn" title="Clear Code">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- Drop Zone / Upload -->
+          <div class="drop-zone" id="drop-zone">
+            <div class="drop-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00f5c4" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p class="drop-text">Drop <code>.py</code> file here or <label for="file-input" class="file-label">browse</label></p>
+            <input type="file" id="file-input" accept=".py,.txt" hidden />
+          </div>
+
+          <!-- Code Editor -->
+          <div class="code-editor-wrapper">
+            <div class="editor-header">
+              <span class="file-name" id="current-filename">untitled.py</span>
+              <div class="editor-controls">
+                <span class="line-count" id="line-count">0 lines</span>
+              </div>
+            </div>
+            <div class="line-numbers" id="line-numbers"></div>
+            <textarea
+              id="code-editor"
+              class="code-editor"
+              spellcheck="false"
+              placeholder="# Paste your Python code here..."
+            ></textarea>
+          </div>
+
+          <!-- Config Options -->
+          <div class="config-row">
+            <div class="config-group">
+              <label class="config-label">Min Severity</label>
+              <select id="severity-select" class="config-select">
+                <option value="all">All</option>
+                <option value="low">Low+</option>
+                <option value="medium">Medium+</option>
+                <option value="high" selected>High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+            <div class="config-group">
+              <label class="config-label">Rules</label>
+              <select id="rules-select" class="config-select">
+                <option value="all">All Rules</option>
+                <option value="PAM001">PAM001 – SQL Injection</option>
+                <option value="PAM002">PAM002 – Cmd Injection</option>
+                <option value="PAM003">PAM003 – Deserialization</option>
+              </select>
+            </div>
+            <button class="btn-primary scan-btn" id="scan-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Scan Code
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Results Panel -->
+        <div class="panel results-panel" id="results-panel">
+          <!-- Summary Cards -->
+          <div class="summary-cards" id="summary-cards" style="display:none;">
+            <div class="summary-card card-total">
+              <div class="card-icon">📁</div>
+              <div class="card-data">
+                <span class="card-value" id="total-findings">0</span>
+                <span class="card-label">Findings</span>
+              </div>
+            </div>
+            <div class="summary-card card-high">
+              <div class="card-icon">🔴</div>
+              <div class="card-data">
+                <span class="card-value" id="high-count">0</span>
+                <span class="card-label">Critical/High</span>
+              </div>
+            </div>
+            <div class="summary-card card-medium">
+              <div class="card-icon">🟡</div>
+              <div class="card-data">
+                <span class="card-value" id="medium-count">0</span>
+                <span class="card-label">Medium</span>
+              </div>
+            </div>
+            <div class="summary-card card-speed">
+              <div class="card-icon">⚡</div>
+              <div class="card-data">
+                <span class="card-value" id="scan-speed">0ms</span>
+                <span class="card-label">Scan Time</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Placeholder / Empty State -->
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                <polygon points="30,4 56,18 56,42 30,56 4,42 4,18" stroke="#00f5c4" stroke-width="1.5" fill="none" opacity="0.4"/>
+                <polygon points="30,12 48,22 48,38 30,48 12,38 12,22" stroke="#00f5c4" stroke-width="1" fill="rgba(0,245,196,0.05)"/>
+                <circle cx="30" cy="30" r="8" stroke="#00f5c4" stroke-width="1.5" fill="none"/>
+                <line x1="30" y1="22" x2="30" y2="18" stroke="#00f5c4" stroke-width="1.5"/>
+                <line x1="30" y1="42" x2="30" y2="38" stroke="#00f5c4" stroke-width="1.5"/>
+                <line x1="22" y1="30" x2="18" y2="30" stroke="#00f5c4" stroke-width="1.5"/>
+                <line x1="42" y1="30" x2="38" y2="30" stroke="#00f5c4" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <p class="empty-title">No scan results yet</p>
+            <p class="empty-subtitle">Paste Python code on the left and click <strong>Scan Code</strong></p>
+          </div>
+
+          <!-- Findings List -->
+          <div class="findings-container" id="findings-container" style="display:none;">
+            <div class="findings-header">
+              <span class="findings-title">Security Findings</span>
+              <button class="btn-sm" id="export-json-btn">Export JSON</button>
+            </div>
+            <div class="findings-list" id="findings-list"></div>
+          </div>
+
+          <!-- Scanning Loader -->
+          <div class="scan-loader" id="scan-loader" style="display:none;">
+            <div class="loader-ring"></div>
+            <p class="loader-text">Analyzing code...</p>
+            <p class="loader-sub">Running taint analysis & rule matching</p>
+          </div>
+
+          <!-- Clean Result -->
+          <div class="clean-state" id="clean-state" style="display:none;">
+            <div class="clean-icon">✅</div>
+            <p class="clean-title">No vulnerabilities found!</p>
+            <p class="clean-sub">Your code passed all security checks.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DATA FLOW VISUALIZATION ── -->
+      <div class="panel dataflow-panel" id="dataflow-panel" style="display:none;">
+        <div class="panel-header">
+          <span class="panel-title">🔗 Data-Flow Attack Graph</span>
+          <div class="panel-actions">
+            <select id="finding-select" class="config-select sm"></select>
+            <button class="btn-icon" id="copy-mermaid-btn">Copy Mermaid</button>
+          </div>
+        </div>
+        <div class="dataflow-content">
+          <div class="flow-graph" id="flow-graph"></div>
+          <div class="mermaid-code-box">
+            <div class="mermaid-label">Mermaid Syntax</div>
+            <pre class="mermaid-pre" id="mermaid-output"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RULES SECTION ── -->
+    <section id="rules-section" class="section">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-icon">📋</span> Security Rules</h2>
+        <p class="section-subtitle">Built-in detection rules powered by intra-procedural taint analysis</p>
+      </div>
+      <div class="rules-grid" id="rules-grid">
+        <div class="rule-card" data-rule="PAM001">
+          <div class="rule-header">
+            <span class="rule-id">PAM001</span>
+            <span class="rule-severity sev-high">HIGH</span>
+          </div>
+          <h3 class="rule-title">SQL Injection</h3>
+          <p class="rule-cwe">CWE-89</p>
+          <p class="rule-desc">Detects when untrusted user input flows into SQL query strings via f-strings, concatenation, or format calls, then passed to <code>cursor.execute()</code> or equivalent database sinks.</p>
+          <div class="rule-sources">
+            <span class="tag">input()</span>
+            <span class="tag">request.args</span>
+            <span class="tag">request.form</span>
+          </div>
+          <div class="rule-sinks">
+            <span class="sink-tag">cursor.execute()</span>
+            <span class="sink-tag">cursor.executemany()</span>
+          </div>
+        </div>
+
+        <div class="rule-card" data-rule="PAM002">
+          <div class="rule-header">
+            <span class="rule-id">PAM002</span>
+            <span class="rule-severity sev-high">HIGH</span>
+          </div>
+          <h3 class="rule-title">Command Injection</h3>
+          <p class="rule-cwe">CWE-78</p>
+          <p class="rule-desc">Tracks tainted data from user-controlled sources reaching OS command execution sinks such as <code>os.system()</code>, <code>subprocess.run()</code>, and <code>subprocess.call()</code>.</p>
+          <div class="rule-sources">
+            <span class="tag">input()</span>
+            <span class="tag">sys.argv</span>
+            <span class="tag">os.environ</span>
+          </div>
+          <div class="rule-sinks">
+            <span class="sink-tag">os.system()</span>
+            <span class="sink-tag">subprocess.run()</span>
+            <span class="sink-tag">subprocess.Popen()</span>
+          </div>
+        </div>
+
+        <div class="rule-card" data-rule="PAM003">
+          <div class="rule-header">
+            <span class="rule-id">PAM003</span>
+            <span class="rule-severity sev-critical">CRITICAL</span>
+          </div>
+          <h3 class="rule-title">Unsafe Deserialization</h3>
+          <p class="rule-cwe">CWE-502</p>
+          <p class="rule-desc">Identifies cases where untrusted data is passed to <code>pickle.loads()</code>, <code>marshal.loads()</code>, or <code>yaml.load()</code> without safe loaders, enabling remote code execution.</p>
+          <div class="rule-sources">
+            <span class="tag">input()</span>
+            <span class="tag">request.data</span>
+            <span class="tag">open().read()</span>
+          </div>
+          <div class="rule-sinks">
+            <span class="sink-tag">pickle.loads()</span>
+            <span class="sink-tag">marshal.loads()</span>
+            <span class="sink-tag">yaml.load()</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ABOUT SECTION ── -->
+    <section id="about-section" class="section">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-icon">ℹ️</span> About PyAttackMap</h2>
+        <p class="section-subtitle">High-performance native security analysis for Python codebases</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-icon">🚀</div>
+          <h3>Native C++20 Engine</h3>
+          <p>Zero Python interpreter runtime overhead. The analysis engine is compiled to native machine code achieving 42x speedup over the Python baseline.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🌳</div>
+          <h3>Tree-sitter Parsing</h3>
+          <p>Uses the official Tree-sitter C runtime with Python grammar for robust, fast concrete syntax tree parsing without executing target code.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🔍</div>
+          <h3>Taint Tracking</h3>
+          <p>Intra-procedural def-use data flow analysis that traces untrusted sources to critical sinks, with full propagation path reporting.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">📊</div>
+          <h3>Structured Output</h3>
+          <p>Deterministic JSON reporting with source coordinates, remediation guidance, confidence scores, and Mermaid attack graph export.</p>
+        </div>
+      </div>
+      <div class="benchmark-table-wrapper">
+        <h3 class="bench-title">Benchmark Highlights</h3>
+        <table class="bench-table">
+          <thead>
+            <tr>
+              <th>Corpus</th><th>Files</th><th>Size</th><th>Python Baseline</th><th>C++20 Native</th><th>Speedup</th><th>Parity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Small</td><td>10</td><td>1.55 KB</td><td>29.16 ms</td><td class="perf-val">3.22 ms</td><td class="speedup">9.1x 🚀</td><td>5/5</td></tr>
+            <tr><td>Medium</td><td>50</td><td>10.40 KB</td><td>318.34 ms</td><td class="perf-val">10.85 ms</td><td class="speedup">29.4x 🚀</td><td>25/25</td></tr>
+            <tr><td>Large</td><td>200</td><td>113.11 KB</td><td>1,608.57 ms</td><td class="perf-val">37.96 ms</td><td class="speedup">42.4x 🚀</td><td>300/300</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="brand-name small">PyAttack<span class="brand-accent">Map</span></span>
+        <span class="footer-tagline">Explainable Static Security Analysis</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Darshan7455/PyAttackMap" target="_blank">GitHub</a>
+        <a href="#rules-section">Rules</a>
+        <a href="#about-section">About</a>
+      </div>
+      <div class="footer-license">MIT License · C++20 Native Engine</div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
